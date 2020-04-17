@@ -13,6 +13,11 @@
 	@Autowired와 @Qualifier 두 가지만 해결한다.-->
 	<context:annotation-config />
 	
+	<!-- <bean id="wordDao1" class="com.word.dao.WordDao">
+		<qualifier value="usedDao"/>
+	</bean>
+	<bean id="wordDao2" class="com.word.dao.WordDao" />
+	<bean id="wordDao3" class="com.word.dao.WordDao" /> -->
 	<bean id="wordDao" class="com.word.dao.WordDao" />
 	
 	<bean id="registerService" class="com.word.service.WordRegisterService"/>
