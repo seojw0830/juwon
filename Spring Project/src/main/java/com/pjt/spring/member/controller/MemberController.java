@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +23,7 @@ public class MemberController {
 	MemberService service;
 	
 	@RequestMapping(value="/memJoin", method=RequestMethod.POST) // 폼에서 넘어오는 방식이 POST인 경우, GET방식은 똑같이 GET으로 써주던가 안써줘도된다.
-	public String memJoin(Model model, HttpServletRequest request) {
+	public String memJoin(@ModelAttribute("mem") Member member, Model model, HttpServletRequest request) {
 		String memId = request.getParameter("memId");
 		String memPw = request.getParameter("memPw");
 		String memMail = request.getParameter("memMail");
