@@ -1,4 +1,4 @@
-package com.bs.lec20.member.service;
+package com.bs.lec21.member.service;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -7,8 +7,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bs.lec20.member.Member;
-import com.bs.lec20.member.dao.MemberDao;
+import com.bs.lec21.member.Member;
+import com.bs.lec21.member.dao.MemberDao;
 
 @Service
 public class MemberService implements IMemberService {

@@ -1,4 +1,4 @@
-package com.bs.lec20.member.controller;
+package com.bs.lec21.member.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -9,13 +9,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bs.lec20.member.Member;
-import com.bs.lec20.member.service.MemberService;
+import com.bs.lec21.member.Member;
+import com.bs.lec21.member.service.MemberService;
 
 @Controller
 @RequestMapping("/member")
@@ -58,19 +59,6 @@ public class MemberController {
 		return "/member/loginForm";
 	}
 	
-	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String memLogin(Member member, HttpServletRequest request) {
-		
-		Member mem = service.memberSearch(member);
-		
-		HttpSession session = request.getSession(); // request 객체에 세션을 가져옴.
-		session.setAttribute("member", mem); // 세션에 mem 속성을 추가함
-		
-		return "/member/loginOk";
-	}
-	
-	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String memLogin(Member member, HttpSession session) {
 		
@@ -82,17 +70,6 @@ public class MemberController {
 	}
 	
 	// Logout
-	/*
-	@RequestMapping("/logout")
-	public String memLogout(Member member, HttpServletRequest request) {
-		
-		HttpSession session = request.getSession(); 
-		session.invalidate(); // 세션에 저장된 속성이 더이상 필요 없을 때 이루어지는 과정이다. 주로 로그아웃 또는 회원탈퇴 등에 사용됨	
-		
-		return "/member/logoutOk";
-	}
-	*/
-	
 	@RequestMapping("/logout")
 	public String memLogout(Member member, HttpSession session) {
 		
@@ -102,18 +79,20 @@ public class MemberController {
 	}
 	
 	// Modify
-	@RequestMapping(value = "/modifyForm", method = RequestMethod.GET)
-	public ModelAndView modifyForm(HttpServletRequest request) {
+	@RequestMapping(value = "/modifyForm")
+	public String modifyForm(Model model, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		Member member = (Member) session.getAttribute("member");
 		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("member", service.memberSearch(member));
+		// session에 멤버 속성이 없는 경우 리다이렉트 시켜줌, 있는 경우는 원래 프로세스대로 진행
+		if(null == member) {
+			return "redirect:/";
+		} else {
+			model.addAttribute("member", service.memberSearch(member));
+		}
 		
-		mav.setViewName("/member/modifyForm");
-		
-		return mav;
+		return "/member/modifyForm";
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
@@ -139,8 +118,14 @@ public class MemberController {
 		
 		HttpSession session =  request.getSession();
 		Member member = (Member) session.getAttribute("member");
-		mav.addObject("member", member);
-		mav.setViewName("/member/removeForm");
+		
+		if(null == member) {
+			mav.setViewName("redirect:/");
+		} else {
+			mav.addObject("member", member);
+			mav.setViewName("/member/removeForm");
+		}
+		
 		
 		return mav;
 	}

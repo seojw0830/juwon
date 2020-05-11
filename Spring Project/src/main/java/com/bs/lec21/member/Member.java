@@ -1,4 +1,4 @@
-package com.bs.lec20.member;
+package com.bs.lec21.member;
 
 public class Member {
 	

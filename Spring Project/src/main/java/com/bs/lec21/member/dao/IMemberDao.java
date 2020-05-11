@@ -1,8 +1,8 @@
-package com.bs.lec20.member.dao;
+package com.bs.lec21.member.dao;
 
 import java.util.Map;
 
-import com.bs.lec20.member.Member;
+import com.bs.lec21.member.Member;
 
 public interface IMemberDao {
 	Map<String, Member> memberInsert(Member member);
