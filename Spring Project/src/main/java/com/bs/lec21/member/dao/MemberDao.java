@@ -1,5 +1,10 @@
-	package com.bs.lec21.member.dao;
+package com.bs.lec21.member.dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +14,16 @@ import com.bs.lec21.member.Member;
 
 @Repository
 public class MemberDao implements IMemberDao {
-
+	private String driver = "oracle.jdbc.driver.OracleDriver";
+	private String url = "jdbc:oracle:thin@localhost:1521:xe";
+	private String userid = "scott";
+	private String userpw = "tiger";
+	
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	
+	
 	private HashMap<String, Member> dbMap;
 	
 	public MemberDao() {
@@ -17,10 +31,32 @@ public class MemberDao implements IMemberDao {
 	}
 	
 	@Override
-	public Map<String, Member> memberInsert(Member member) {
+	public int memberInsert(Member member) {
+		int result = 0;
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, userid, userpw);
+			String sql = "INSERT INTO MEMBER (memId,memPw, memMail) values (?,?,?)";
+			pstmt.setString(1, member.getMemId());
+			pstmt.setString(2, member.getMemPw());
+			pstmt.setString(3, member.getMemMail());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null) pstmt.close();
+				if (conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
 		
-		dbMap.put(member.getMemId(), member);
-		return dbMap;
+		
+//		dbMap.put(member.getMemId(), member);
+		return result;
 		
 	}
 

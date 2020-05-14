@@ -18,7 +18,13 @@ public class MemberService implements IMemberService {
 	
 	@Override
 	public void memberRegister(Member member) {
-		printMembers(dao.memberInsert(member));
+		int result = dao.memberInsert(member);
+		
+		if (result == 0) {
+			System.out.println("Join Fail!!");
+		} else {
+			System.out.println("Join Success!!");
+		}
 	}
 
 	@Override
